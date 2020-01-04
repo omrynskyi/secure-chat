@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
   
 // Initialize Firebase
-console.log(process.env.VUE_APP_PROJECT_ID);
+
 const config = {
   apiKey: process.env.VUE_APP_API_KEY,
   authDomain: process.env.VUE_APP_PROJECT_ID +".firebaseapp.com",
