@@ -30,7 +30,7 @@
                         name: this.name,
                         timestamp: Date.now()
                     }).catch(err => {
-                        console.log(err);
+                        console.error(err);
                     });
                     this.newMessage = null;
                     this.errorText = null;
