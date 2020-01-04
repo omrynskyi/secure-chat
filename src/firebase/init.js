@@ -2,15 +2,16 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
   
 // Initialize Firebase
+console.log(process.env.VUE_APP_PROJECT_ID);
 const config = {
-  apiKey: "AIzaSyC3vbGpbIHa39h04tIQPQ9dGTE0osOiaDA",
-  authDomain: "chat-test-3d94c.firebaseapp.com",
-  databaseURL: "https://chat-test-3d94c.firebaseio.com",
-  projectId: "chat-test-3d94c",
-  storageBucket: "chat-test-3d94c.appspot.com",
-  messagingSenderId: "164560417826",
-  appId: "1:164560417826:web:31c84828a03e693a20867b",
-  measurementId: "G-9QJWD314NQ"
+  apiKey: process.env.VUE_APP_API_KEY,
+  authDomain: process.env.VUE_APP_PROJECT_ID +".firebaseapp.com",
+  databaseURL: "https://" + process.env.VUE_APP_PROJECT_ID + ".firebaseio.com",
+  projectId: process.env.VUE_APP_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_PROJECT_ID + ".appspot.com",
+  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+  appId: "" + process.env.VUE_APP_APP_ID,
+  measurementId:  process.env.VUE_APP_MEASUREMENT_ID
 };
 
 const firebaseApp = firebase.initializeApp(config);
