@@ -25,35 +25,31 @@ export default {
     }
   },
   methods: {
-    login() {//checking if user inputed a name
-      if (this.name) {
-        //if yes enter chat with the name as a peramenter
-        //if want good login change this part to check if password matches name
-        this.$router.push({name:'UserList', params: { name: this.name, userList: ["Fredrick","Joe","Yuri","Ligma","Tylor"]}});
-       //this.$router.push({name: 'Chat', params: {name: this.name}})
-      } else {
-        //if not error message appears
-        this.errorText = "Please enter a name!"
-      }
-    },
     socialLogin(){
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then((result)=> {
-      let nameOfUser = result.additionalUserInfo.profile.name;
-        if(!result.additionalUserInfo.isNewUser){
-          console.log(result);
-  
-          fb.collection("users").doc(nameOfUser).set({
-            name: result.additionalUserInfo.profile.name
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          
+          let user = {
+            id: result.user.uid,
+            name: result.additionalUserInfo.profile.name,
+            picture: result.additionalUserInfo.profile.picture,
+            email: result.additionalUserInfo.profile.email  
+          };
 
-          });
-        }
-        
-        this.$router.push({name:'UserList' , params: { name: nameOfUser, userList: ["Fredrick","Joe","Yuri","Ligma","Tylor"]}});
-      }).catch((err) =>{
-        alert("Oops. " + err.message)
-      });
-      
+          let userRef = fb.collection('users');
+          userRef.doc(user.id).get()
+            .then((doc) => {
+              if (!doc.exists) {
+                userRef.doc(user.id).set(user);
+              }
+            });
+
+          this.$router.push({name:'UserList' , params: { name: user.name }});
+        })
+        .catch((err) =>{
+          alert("Oops. " + err.message)
+        });
     }
   }
 }
