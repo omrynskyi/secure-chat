@@ -15,7 +15,7 @@
 
     export default {
         name: 'CreateMessage',
-        props: ['name'],
+        props: ['user'],
         data(){
             return {
                 newMessage: null,
@@ -27,7 +27,7 @@
                 if (this.newMessage) {
                     fb.collection('messages').add({
                         message: this.newMessage,
-                        name: this.name,
+                        name: this.user,
                         timestamp: Date.now()
                     }).catch(err => {
                         console.error(err);

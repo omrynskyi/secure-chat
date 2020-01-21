@@ -1,8 +1,8 @@
 
 <template>
     <div class="chat container">
-        <h2 class="text-primary text-center">Real-Time Chat</h2>
-        <h5 class="text-secondary text-center">Powered by Vue.js & Firebase</h5>
+        <h2 class="text-primary text-center">Secure-Chat with {{partner}}</h2>
+        <h5 class="text-secondary text-center"></h5>
         <div class="card">
             <div class="card-body">
                 <p class="nomessages text-secondary" v-if="messages.length == 0">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="card-action">
-                <CreateMessage :name="name"/>
+                <CreateMessage :user="user"/>
             </div>
         </div>
     </div>
@@ -28,22 +28,25 @@
     import moment from 'moment';    
     export default {
         name: 'Chat',
-        props: ['name'],
+        
         components: {
             CreateMessage
         },
         data() {
             return{
-                messages: []
+                messages: [],
+                user: this.$route.params.user,
+                partner: this.$route.params.partner
             }
         },
         created() {
+            //creates ne colloection in firebase and orders it by time
             let ref = fb.collection('messages').orderBy('timestamp');
-
             ref.onSnapshot(snapshot => {
                 snapshot.docChanges().forEach(change => {
                     if (change.type == 'added') {
                         let doc = change.doc;
+                        //pushes a message object into the array
                         this.messages.push({
                             id: doc.id,
                             name: doc.data().name,

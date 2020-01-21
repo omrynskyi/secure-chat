@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../views/Login.vue'
 import Chat from '../views/Chat.vue'
+import UserList from "../views/UserList.vue"
 
 Vue.use(Router)
 
@@ -15,17 +16,22 @@ export default new Router({
       component: Login
     },
     {
+      path: "/users",
+      name: "UserList",
+      component: UserList
+    },
+    {
       path: '/chat',
       name: 'Chat',
       component: Chat,
-      props: true,
-      beforeEnter: (to, from, next) => {
-        if (to.params.name) {
-          next();
-        } else {
-          next({name: 'Login'});
-        }
-      }
+      props: true
+      // beforeEnter: (to, from, next) => {
+      //   if (to.params.name) {
+      //     next();
+      //   } else {
+      //     next({name: 'Login'});
+      //   }
+      // }
     }
   ]
 })
