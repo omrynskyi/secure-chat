@@ -6,7 +6,7 @@
                 <p class="text-danger" v-if="errorText">{{ errorText }}</p>
             </div>
 
-            <button class="btn btn-primary" type="submit" name="action">Submit</button>
+            <button class="btn btn-primary" type="submit" name="action" >Submit</button>
         </form>
     </div>
 </template>
@@ -15,7 +15,7 @@
 
     export default {
         name: 'CreateMessage',
-        props: ['user'],
+        props: ['user', 'reciver'],
         data(){
             return {
                 newMessage: null,
@@ -24,11 +24,15 @@
         },
         methods: {
             createMessage () {
+                
                 if (this.newMessage) {
+                    console.log(this.reciver);
                     fb.collection('messages').add({
                         message: this.newMessage,
-                        name: this.user,
-                        timestamp: Date.now()
+                        name: this.user.name,
+                        sendId: this.user.id,
+                        timestamp: Date.now(),
+                        toId: this.reciver.id
                     }).catch(err => {
                         console.error(err);
                     });

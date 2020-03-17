@@ -1,11 +1,13 @@
 <template>
     <div>
+        <div class="boite">
 
-        <ul id="list">
-            <li v-for=" user in users" :key="user.id" v-on:click="enter(user.name)">
+        <ul class="list-group">
+            <li class="list-group-item" v-for=" user in users" :key="user.id" v-on:click="enter(user.name)">
                 {{ user.name }}
             </li>
         </ul>
+    </div>
     </div>
 </template>
 <script>
@@ -13,10 +15,11 @@
     export default {
        name:"UserList",
         
+
         data () {
             return {
                 users: [],
-                name: this.$route.params.name
+                user: this.$route.params.user
 
             }
         },
@@ -28,20 +31,41 @@
                 snapshot.docChanges().forEach(change => {
                     if (change.type == 'added') {
                         let doc = change.doc;
-                        
-                        this.users.push({
+                        if(this.user.id != doc.id){
+                            this.users.push({
                             id: doc.id,
                             name: doc.data().name
                         });
+                        }
+                        
                     }
                 });
             });
         },
         methods:{
             enter: function(partner){
-                this.$router.push({name:'Chat', params: {user: this.name , partner: partner } });
+                this.$router.push({name:'Chat', params: {user: this.user , partner: partner } });
 
             }
         }
     }
 </script>
+<style scoped lang="css">
+
+.boite {
+    color: rgb(rgb(0, 255, 234))
+}
+li {
+    list-style-type: none; 
+    background-color : rgb(131, 131, 131);
+    background-repeat : no-repeat;
+    background-position: left center;
+    padding-left : 1%; 
+    margin-left : 30%;
+    margin-right : 5%;
+    width : 40%;
+    height: 5%;
+    margin-top: 10px;
+    }
+
+</style>

@@ -45,7 +45,7 @@ export default {
               }
             });
 
-          this.$router.push({name:'UserList' , params: { name: user.name }});
+          this.$router.push({name:'UserList' , params: { user: user }});
         })
         .catch((err) =>{
           alert("Oops. " + err.message)
