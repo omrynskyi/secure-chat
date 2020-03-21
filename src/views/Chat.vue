@@ -2,7 +2,7 @@
 <template>
     <div class="chat container">
         <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="back()">Back to Users</button>
-        <h2 class="text-primary text-center">Secure-Chat with {{partner.name}}</h2>
+        <h2 class="text-primary text-center">Secure-Chat with {{this.partner.name}}</h2>
         <h5 class="text-secondary text-center"></h5>
         <div class="card">
             <div class="card-body">
@@ -44,12 +44,14 @@
             //creates ne colloection in firebase and orders it by time
             let ref = fb.collection('messages').orderBy('timestamp');
             let user = this.user;
+            let partner = this.partner;
             ref.onSnapshot(snapshot => {
                 snapshot.docChanges().forEach(change => {
                     if (change.type == 'added') {
                         let doc = change.doc;
                         //pushes a message object into the array
-                        if(doc.data().toId == user.id || doc.data().sendId == user.id){
+                        if((doc.data().toId == partner.id && doc.data().sendId == user.id)
+                                || (doc.data().toId == user.id && doc.data().sendId == partner.id)){
                             this.messages.push({
                                 id: doc.id,
                                 name: doc.data().name,

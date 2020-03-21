@@ -3,7 +3,7 @@
         <div class="boite">
 
         <ul class="list-group">
-            <li class="list-group-item" v-for=" user in users" :key="user.id" v-on:click="enter(user.name)">
+            <li class="list-group-item" v-for=" user in users" :key="user.id" v-on:click="enter(user)">
                 {{ user.name }}
             </li>
         </ul>
