@@ -12,6 +12,7 @@
 </template>
 <script>
     import fb from '@/firebase/init';
+    import JSEncrypt from 'node-jsencrypt'  
 
     export default {
         name: 'CreateMessage',
@@ -26,9 +27,12 @@
             createMessage () {
                 
                 if (this.newMessage) {
+                    var encryptReciver = this.encrypt(this.newMessage, this.reciver.publicKey);
+                    var encryptSender = this.encrypt(this.newMessage,this.user.publicKey);
                     console.log(this.reciver);
                     fb.collection('messages').add({
-                        message: this.newMessage,
+                        encryptSender: encryptSender,
+                        encryptReciver: encryptReciver,
                         name: this.user.name,
                         sendId: this.user.id,
                         timestamp: Date.now(),
@@ -41,7 +45,14 @@
                 } else {
                     this.errorText = "A message must be entered!"
                 }
+            },
+            encrypt (content, publicKey) {
+                const crypt = new JSEncrypt();
+                crypt.setPublicKey(publicKey);
+                return crypt.encrypt(content);
             }
+
+
         }
     }
 </script>

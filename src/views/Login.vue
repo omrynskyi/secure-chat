@@ -26,15 +26,20 @@ export default {
   },
   methods: {
     socialLogin(){
+      
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
+          let keys = this.generateKeys();
           
           let user = {
             id: result.user.uid,
             name: result.additionalUserInfo.profile.name,
             picture: result.additionalUserInfo.profile.picture,
-            email: result.additionalUserInfo.profile.email  
+            email: result.additionalUserInfo.profile.email,
+            privateKey: keys.privateKey,
+            publicKey: keys.publicKey
+
           };
 
           let userRef = fb.collection('users');
@@ -50,7 +55,16 @@ export default {
         .catch((err) =>{
           alert("Oops. " + err.message)
         });
-    }
+    },
+      generateKeys(){
+        const JSEncrypt = require('node-jsencrypt');
+        const crypt = new JSEncrypt({default_key_size: 2056})
+        let data= {
+          publicKey: crypt.getPublicKey(),//.substring(27,crypt.getPublicKey().length-25),
+          privateKey: crypt.getPrivateKey()//().substring(32,crypt.getPrivateKey().length-30)
+        }
+        return data;
+      }
   }
 }
 </script>

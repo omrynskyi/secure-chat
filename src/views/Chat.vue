@@ -26,7 +26,9 @@
 <script>
     import CreateMessage from '@/components/CreateMessage';
     import fb from '@/firebase/init';
-    import moment from 'moment';    
+    import moment from 'moment';
+    import JSEncrypt from 'node-jsencrypt'    
+
     export default {
         name: 'Chat',
         
@@ -50,12 +52,19 @@
                     if (change.type == 'added') {
                         let doc = change.doc;
                         //pushes a message object into the array
-                        if((doc.data().toId == partner.id && doc.data().sendId == user.id)
-                                || (doc.data().toId == user.id && doc.data().sendId == partner.id)){
-                            this.messages.push({
+                        
+                        if((doc.data().toId == partner.id && doc.data().sendId == user.id) || (doc.data().toId == user.id && doc.data().sendId == partner.id)){
+                                let msg;
+                                if(doc.data().toId == user.id){
+                                     msg = this.decrypt(doc.data().encyptReciver,user.privateKey)
+                                }else if(doc.data().sendId == user.id){
+                                     msg = this.dencrypt(doc.data().encryptSender,user.privateKey)
+
+                                }
+                                this.messages.push({
                                 id: doc.id,
                                 name: doc.data().name,
-                                message: doc.data().message,
+                                message: msg,
                                 timestamp: moment(doc.data().timestamp).format('LTS')
                             });
                         }
@@ -68,6 +77,11 @@
             back: function(){
                 this.$router.push({name:'UserList', params: {user: this.user } });
 
+            },
+             decrypt (content, privateKey) {
+                const crypt = new JSEncrypt();
+                crypt.setPrivateKey(privateKey);
+                return crypt.decrypt(content);
             }
         }
     }

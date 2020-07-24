@@ -1,5 +1,11 @@
 <template>
+    
     <div>
+         <div class="bouge">
+            <div class="btn btn-info">
+                Logged in as:{{this.user.name}}
+            </div>
+        </div>    
         <div class="boite">
 
         <ul class="list-group">
@@ -34,7 +40,9 @@
                         if(this.user.id != doc.id){
                             this.users.push({
                             id: doc.id,
-                            name: doc.data().name
+                            name: doc.data().name,
+                            privateKey: doc.data().privateKey,
+                            publicKey: doc.data().publicKey
                         });
                         }
                         
@@ -67,5 +75,9 @@ li {
     height: 5%;
     margin-top: 10px;
     }
+.bouge{
+    padding-left: 1%;
+    margin-right: 80%;
 
+}
 </style>
